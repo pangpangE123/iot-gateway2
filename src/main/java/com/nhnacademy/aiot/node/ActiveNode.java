@@ -37,7 +37,7 @@ public abstract class ActiveNode implements Runnable {
     @Override
     public void run() {
         preProcess();
-        while (Thread.currentThread().isAlive()) {
+        while (!Thread.currentThread().isInterrupted()) {
             process();
         }
         postProcess();
