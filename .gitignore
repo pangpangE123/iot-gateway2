@@ -2,4 +2,4 @@
 .vscode/
 .idea/
 target/
-.drawio
+*.drawio
