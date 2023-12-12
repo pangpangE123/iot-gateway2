@@ -5,12 +5,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.lang.reflect.Field;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import com.nhnacademy.aiot.repository.Data.DataBuilder;
 
 class DataTest {
 
+    private static final DataBuilder DEFAULT_DATA_BUILDER = //
+            Data.builder() //
+                    .deviceEui("deviceEui") //
+                    .site("site") //
+                    .branch("branch") //
+                    .place("place") //
+                    .sensorType("sensorType") //
+                    .address(0) //
+                    .value(0);
+
     @Test
     @DisplayName("빌더 패턴 테스트")
-    void builderTest() throws IllegalArgumentException, IllegalAccessException {
+    void buildTest() throws IllegalArgumentException, IllegalAccessException {
         // given
         Field[] fields = Data.class.getDeclaredFields();
         for (Field field : fields) {
@@ -18,15 +29,7 @@ class DataTest {
         }
 
         // when
-        Data data = Data.builder() //
-                .deviceEui("deviceEui") //
-                .site("site") //
-                .branch("branch") //
-                .place("place") //
-                .sensorType("sensorType") //
-                .address(0) //
-                .value(0) //
-                .build();
+        Data data = DEFAULT_DATA_BUILDER.build();
 
         // then
         for (Field field : fields) {
@@ -43,15 +46,7 @@ class DataTest {
     @DisplayName("getter를 호출하면 필드 값을 반환한다")
     void getterTest() {
         // given
-        Data data = Data.builder() //
-                .deviceEui("deviceEui") //
-                .site("site") //
-                .branch("branch") //
-                .place("place") //
-                .sensorType("sensorType") //
-                .address(0) //
-                .value(0) //
-                .build();
+        Data data = DEFAULT_DATA_BUILDER.build();
 
         // when
         // then
@@ -66,26 +61,8 @@ class DataTest {
     @DisplayName("데이터 객체의 동등성 테스트")
     void equalityTest() {
         // given
-        Data data = Data.builder() //
-                .deviceEui("deviceEui") //
-                .site("site") //
-                .branch("branch") //
-                .place("place") //
-                .sensorType("sensorType") //
-                .address(0) //
-                .value(0) //
-                .build();
-
-        Data data2 = Data.builder() //
-                .deviceEui("deviceEui") //
-                .site("site") //
-                .branch("branch") //
-                .place("place") //
-                .sensorType("sensorType") //
-                .address(0) //
-                .value(0) //
-                .build();
-
+        Data data = DEFAULT_DATA_BUILDER.build();
+        Data data2 = DEFAULT_DATA_BUILDER.build();
         Data data3 = Data.builder() //
                 .deviceEui("deviceEui") //
                 .site("site") //
