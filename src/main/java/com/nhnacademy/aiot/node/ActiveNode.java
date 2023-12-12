@@ -8,16 +8,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class ActiveNode implements Runnable {
 
-    protected ActiveNode() {
+    Thread thread;
 
+
+    protected ActiveNode() {
+        thread = new Thread(this);
     }
 
     /**
      * 노드를 실행합니다
      */
-    protected void start() {
+    public void start() {
 
-        new Thread(this).start();
+        thread.start();
 
     }
 
@@ -37,7 +40,7 @@ public abstract class ActiveNode implements Runnable {
     @Override
     public void run() {
         preProcess();
-        while (!Thread.currentThread().isInterrupted()) {
+        while (!thread.isInterrupted()) {
             process();
         }
         postProcess();
