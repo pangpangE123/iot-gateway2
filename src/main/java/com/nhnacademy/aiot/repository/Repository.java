@@ -10,12 +10,12 @@ public interface Repository<T> {
     /**
      * 객체를 저장합니다.
      * 
-     * @param t 저장할 객체입니다.
+     * @param object 저장할 객체입니다.
      * @return 객체를 저장하면 <code>true</code>를 반환합니다.
      *         <p>
      *         객체를 저장하지 못하면 <code>false</code>를 반환합니다.
      */
-    boolean save(T t);
+    boolean save(T object);
 
     /**
      * 아이디를 통해 저장된 객체를 찾습니다.
@@ -28,12 +28,12 @@ public interface Repository<T> {
     /**
      * 저장된 객체를 지웁니다.
      * 
-     * @param t 지울 객체입니다.
+     * @param object 지울 객체입니다.
      * @return 객체를 지우면 <code>true</code>를 반환합니다.
      *         <p>
      *         객체를 지우지 못하면 <code>false</code>를 반환합니다.
      */
-    boolean remove(T t);
+    boolean remove(T object);
 
     /**
      * 저장된 객체를 지웁니다.
