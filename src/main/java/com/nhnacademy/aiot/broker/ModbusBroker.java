@@ -13,7 +13,7 @@ public interface ModbusBroker {
     public byte[] read();
 
     /**
-     * output stream에 byte 배열의 length만큼 byte를 쓰도록 합니다.
+     * outputStream에 byte 배열의 length만큼 byte를 쓰도록 합니다.
      * 
      * @param b write할 데이터
      */
