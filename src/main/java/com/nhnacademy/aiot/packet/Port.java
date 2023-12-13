@@ -17,7 +17,7 @@ public class Port {
     }
 
     /**
-     * Port에 Wire를 추가하고 반환합니다.
+     * Port에 새로운 Wire를 추가하고 반환합니다.
      * 
      * @return 추가한 Wire
      */
@@ -25,6 +25,14 @@ public class Port {
         Wire wire = new Wire();
         wires.add(wire);
         return wire;
+    }
+
+    /**
+     * Port에 Wire를 추가합니다.
+     * @param wire 추가할 Wire
+     */
+    public void add(Wire wire) {
+        wires.add(wire);
     }
 
     /**
@@ -53,19 +61,22 @@ public class Port {
      * @return Wire에서 꺼낸 Packet
      */
     public synchronized Packet take() {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             for (Wire wire : wires) {
                 if (!wire.isEmpty()) {
                     return wire.take();
                 }
             }
             try {
-                wait();
                 log.debug("Port: 대기 상태로 전환되었습니다.");
+                wait();
+                log.debug("Port: 대기 상태가 해제되었습니다.");
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 log.error("Port: InterruptedException 발생", e);
             }
         }
+        log.debug("Port: interrupt 신호를 받아 종료되었습니다.");
+        return null;
     }
 }
