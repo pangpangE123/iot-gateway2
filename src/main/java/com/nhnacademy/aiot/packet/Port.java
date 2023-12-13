@@ -10,6 +10,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class Port {
+
+    private static final String FAILED_TO_PUT_PACKET_MESSAGE = "Port: 패킷이 Wire로 보내지지 않았습니다.";
+    private static final String WAITING_STRATED_MESSAGE = "Port: 대기 상태로 전환되었습니다.";
+    private static final String WAITING_ENDED_MESSAGE = "Port: 대기 상태가 해제되었습니다.";
+    private static final String INTERRUPTED_EXCEPTION_MESSAGE = "Port: InterruptedException 발생";
+    private static final String EXIT_DUE_TO_EXCEPTION_MESSAGE = "Port: interrupt 신호를 받아 종료되었습니다.";
+
     private final Set<Wire> wires;
 
     public Port() {
@@ -29,6 +36,7 @@ public class Port {
 
     /**
      * Port에 Wire를 추가합니다.
+     * 
      * @param wire 추가할 Wire
      */
     public void add(Wire wire) {
@@ -45,7 +53,7 @@ public class Port {
         boolean isAllPacketSent = true;
         for (Wire wire : wires) {
             if (!wire.put(packet)) {
-                log.debug("Port: 패킷이 Wire로 보내지지 않았습니다.");
+                log.debug(FAILED_TO_PUT_PACKET_MESSAGE);
                 isAllPacketSent = false;
             }
         }
@@ -68,15 +76,15 @@ public class Port {
                 }
             }
             try {
-                log.debug("Port: 대기 상태로 전환되었습니다.");
+                log.debug(WAITING_STRATED_MESSAGE);
                 wait();
-                log.debug("Port: 대기 상태가 해제되었습니다.");
+                log.debug(WAITING_ENDED_MESSAGE);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                log.error("Port: InterruptedException 발생", e);
+                log.error(INTERRUPTED_EXCEPTION_MESSAGE, e);
             }
         }
-        log.debug("Port: interrupt 신호를 받아 종료되었습니다.");
+        log.debug(EXIT_DUE_TO_EXCEPTION_MESSAGE);
         return null;
     }
 }
