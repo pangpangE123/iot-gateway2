@@ -1,6 +1,6 @@
 package com.nhnacademy.aiot.broker;
 
-import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 /*
@@ -13,7 +13,7 @@ public interface MQTTBroker {
      * @param topicFilter     subscribe할 topic (application name)
      * @param messageListener 수신된 메세지를 처리할 callback
      */
-    public void subscribe(String topicFilter, IMqttActionListener messageListener);
+    public void subscribe(String topicFilter, IMqttMessageListener messageListener);
 
     /**
      * MQTTClient가 publish하도록 합니다.
