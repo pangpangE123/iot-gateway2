@@ -4,10 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.ConcurrentHashMap;
 
 class InMemoryDataRepositoryTest {
 
@@ -37,8 +39,36 @@ class InMemoryDataRepositoryTest {
         );
     }
 
-    // TODO save를 하면 객체를 저장한다.
-    // TODO null 객체를 save하면 예외를 발생시킨다.
-    // TODO 갱신되지 않은 데이터를 넣으면 save하지 않는다.
+    @Test
+    @DisplayName("save를 하면 객체를 저장한다")
+    @SuppressWarnings("unchecked")
+    void saveTest() throws NoSuchFieldException, IllegalAccessException {
+        // given
+        InMemoryDataRepository repository = InMemoryDataRepository.getInstance();
+        Field field = InMemoryDataRepository.class.getDeclaredField("datas");
+        field.setAccessible(true);
+        ConcurrentHashMap<String, Data> datas = (ConcurrentHashMap<String, Data>) field.get(repository);
+
+        String deviceEui = "DeviceEui";
+        Data mockData = Mockito.mock(Data.class);
+        Data mockData2 = Mockito.mock(Data.class);
+        Mockito.when(mockData.getDeviceEui())
+                .thenReturn(deviceEui);
+        Mockito.when(mockData2.getDeviceEui())
+                .thenReturn(deviceEui);
+
+        // when
+        boolean expected = repository.save(mockData);
+        boolean expected2 = repository.save(mockData);
+
+        // then
+        Assertions.assertAll(
+                () -> Assertions.assertEquals(1, datas.size()),
+                () -> Assertions.assertEquals(mockData, datas.get(deviceEui)),
+                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> repository.save(null)),
+                () -> Assertions.assertTrue(expected),
+                () -> Assertions.assertFalse(expected2)
+        );
+    }
     // TODO findById를 하면 해당하는 객체를 반환한다.
 }
