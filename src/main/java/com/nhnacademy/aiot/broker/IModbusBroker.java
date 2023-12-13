@@ -3,7 +3,7 @@ package com.nhnacademy.aiot.broker;
 /*
  * Modbus 클라이언트 간의 메세지를 조정하는 클래스입니다.
  */
-public interface ModbusBroker {
+public interface IModbusBroker {
 
     /**
      * input stream에서 읽어온 byte 배열을 반환합니다.

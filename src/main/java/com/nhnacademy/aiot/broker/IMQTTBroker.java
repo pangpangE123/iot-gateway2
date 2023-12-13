@@ -6,7 +6,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 /*
  * MQTT 클라이언트 간의 메세지를 조정하는 클래스입니다. 
  */
-public interface MQTTBroker {
+public interface IMQTTBroker {
     /**
      * MQTTCLient가 subscribe하도록 합니다.
      * 
