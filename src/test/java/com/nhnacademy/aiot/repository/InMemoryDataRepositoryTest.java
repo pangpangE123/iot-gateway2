@@ -4,12 +4,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.function.Executable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class InMemoryDataRepositoryTest {
 
@@ -34,8 +38,8 @@ class InMemoryDataRepositoryTest {
 
         // then
         Assertions.assertAll(
-                () -> Assertions.assertNotNull(instance),
-                () -> Assertions.assertEquals(instance, instance2)
+                () -> assertNotNull(instance),
+                () -> assertEquals(instance, instance2)
         );
     }
 
@@ -50,12 +54,10 @@ class InMemoryDataRepositoryTest {
         ConcurrentHashMap<String, Data> datas = (ConcurrentHashMap<String, Data>) field.get(repository);
 
         String deviceEui = "DeviceEui";
-        Data mockData = Mockito.mock(Data.class);
-        Data mockData2 = Mockito.mock(Data.class);
-        Mockito.when(mockData.getDeviceEui())
-                .thenReturn(deviceEui);
-        Mockito.when(mockData2.getDeviceEui())
-                .thenReturn(deviceEui);
+        Data mockData = mock(Data.class);
+        Data mockData2 = mock(Data.class);
+        when(mockData.getDeviceEui()).thenReturn(deviceEui);
+        when(mockData2.getDeviceEui()).thenReturn(deviceEui);
 
         // when
         boolean expected = repository.save(mockData);
@@ -63,12 +65,30 @@ class InMemoryDataRepositoryTest {
 
         // then
         Assertions.assertAll(
-                () -> Assertions.assertEquals(1, datas.size()),
-                () -> Assertions.assertEquals(mockData, datas.get(deviceEui)),
-                () -> Assertions.assertThrows(IllegalArgumentException.class, () -> repository.save(null)),
-                () -> Assertions.assertTrue(expected),
-                () -> Assertions.assertFalse(expected2)
+                () -> assertEquals(1, datas.size()),
+                () -> assertEquals(mockData, datas.get(deviceEui)),
+                () -> assertThrows(IllegalArgumentException.class, () -> repository.save(null)),
+                () -> assertTrue(expected),
+                () -> assertFalse(expected2)
         );
     }
-    // TODO findById를 하면 해당하는 객체를 반환한다.
+
+    @Test
+    @DisplayName("findById를 하면 해당하는 객체를 반환한다")
+    void findByIdTest() {
+        // given
+        InMemoryDataRepository repository = InMemoryDataRepository.getInstance();
+        Data expected = mock(Data.class);
+        String deviceEui = "DeviceEui";
+        when(expected.getDeviceEui()).thenReturn(deviceEui);
+        repository.save(expected);
+
+        // when
+        Data actual = repository.findById(deviceEui);
+        Executable executable = () -> repository.findById(null);
+
+        // then
+        assertThrows(IllegalArgumentException.class, executable);
+        assertEquals(expected, actual);
+    }
 }

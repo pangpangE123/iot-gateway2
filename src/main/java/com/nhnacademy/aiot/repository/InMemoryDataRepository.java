@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class InMemoryDataRepository implements Repository<Data> {
 
-    public static final String NULL_CAN_NOT_SAVE_ERROR = "null은 저장할 수 없습니다.";
+    public static final String NULL_CAN_NOT_BE_USED = "null은 입력할 수 없습니다.";
 
     private static InMemoryDataRepository instance;
     private final Map<String, Data> datas;
@@ -27,8 +27,8 @@ public class InMemoryDataRepository implements Repository<Data> {
     @Override
     public boolean save(Data data) {
         if (data == null) {
-            log.error(NULL_CAN_NOT_SAVE_ERROR);
-            throw new IllegalArgumentException(NULL_CAN_NOT_SAVE_ERROR);
+            log.error(NULL_CAN_NOT_BE_USED);
+            throw new IllegalArgumentException(NULL_CAN_NOT_BE_USED);
         }
 
         String deviceEui = data.getDeviceEui();
@@ -41,7 +41,12 @@ public class InMemoryDataRepository implements Repository<Data> {
 
     @Override
     public Data findById(String id) {
-        return null;
+        if (id == null) {
+            log.error(NULL_CAN_NOT_BE_USED);
+            throw new IllegalArgumentException(NULL_CAN_NOT_BE_USED);
+        }
+
+        return datas.get(id);
     }
 
     @Override
