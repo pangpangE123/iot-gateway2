@@ -18,6 +18,8 @@ public abstract class OutputNode extends ActiveNode {
 
     /**
      * 이 노드가 가지고 있는 포트에, 특정 wire를 달아줍니다
+     * 
+     * @param wire inPort에 연결될 와이어입니다
      */
     protected void connect(Wire wire) {
         if (wire == null) {

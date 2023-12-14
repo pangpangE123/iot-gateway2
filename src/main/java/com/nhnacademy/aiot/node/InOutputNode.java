@@ -27,8 +27,8 @@ public abstract class InOutputNode extends ActiveNode {
     /**
      * 어떤 포트의, 어떤 와이어와 연결해줄것인지 결정해주는 메서드 인풋
      * 
-     * @param portNum
-     * @param outNode
+     * @param portNum 연결할 포트의 번호입니다
+     * @param outNode 연결할 노드입니다
      */
     public void connect(int portNum, OutputNode outNode) {
         Wire connectWire = outPorts.get(portNum).add(); // 인노드의 아웃포트에 connectWire 달아줌
@@ -39,7 +39,7 @@ public abstract class InOutputNode extends ActiveNode {
     /**
      * 이 노드가 가지고 있는 포트에, 특정 wire를 달아줍니다
      * 
-     * @param wire
+     * @param wire inPort에 연결될 와이어입니다
      */
     protected void connect(Wire wire) {
         // inPort.add(wire);
@@ -49,8 +49,8 @@ public abstract class InOutputNode extends ActiveNode {
     /**
      * 내가 지정한 포트로 패킷을 넘겨주는 메서드
      * 
-     * @param portNum
-     * @param packet
+     * @param portNum 연결할 포트의 번호입니다
+     * @param packet 전송할 패킷입니다
      */
     protected void send(int portNum, Packet packet) {
         if (outPorts.containsKey(portNum)) {

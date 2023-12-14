@@ -37,8 +37,6 @@ public class InOutputNodeTest {
     InputNode inputNode;
     OutputNode outputNode;
 
-
-
     @BeforeEach
     void reset() {
         NodeProperty mock = mock(NodeProperty.class);
@@ -127,3 +125,4 @@ public class InOutputNodeTest {
         assertThrows(NullPointerException.class, executable);
     }
 }
+
