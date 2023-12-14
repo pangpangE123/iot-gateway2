@@ -1,11 +1,13 @@
 package com.nhnacademy.aiot.repository;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.lang.reflect.Field;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import com.nhnacademy.aiot.repository.Data.DataBuilder;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class DataTest {
 
@@ -76,9 +78,9 @@ class DataTest {
         // when
         // then
         assertAll( //
-                () -> assertEquals(true, data.equals(data2)), //
-                () -> assertEquals(false, data.equals(data3)), //
-                () -> assertEquals(false, data2.equals(data3)) //
+                () -> assertEquals(data, data2), //
+                () -> assertNotEquals(data, data3), //
+                () -> assertNotEquals(data2, data3) //
         );
     }
 }
