@@ -121,4 +121,57 @@ class InMemoryDataRepositoryTest {
         // then
         assertThrows(IllegalArgumentException.class, executable);
     }
+
+    @DisplayName("아이디에 해당하는 객체 삭제")
+    @Test
+    void successToRemoveIfIdIsExist() {
+        // given
+        String deviceEui = "DeviceEui";
+        Data mockData = mock(Data.class);
+        when(mockData.getDeviceEui()).thenReturn(deviceEui);
+        repository.save(mockData);
+
+        // when
+        boolean actual = repository.remove(deviceEui);
+
+        // then
+        assertTrue(actual);
+    }
+
+    @DisplayName("아이디로 null을 삭제하려고하면 예외 발생")
+    @Test
+    void throwExceptionWhenTryToRemoveNullString() {
+        // given
+        // when
+        Executable executable = () -> repository.remove((String) null);
+
+        // then
+        assertThrows(IllegalArgumentException.class, executable);
+    }
+
+    @DisplayName("동일한 객체 삭제")
+    @Test
+    void successToRemoveIfDataIsExist() {
+        // given
+        Data mockData = mock(Data.class);
+        when(mockData.getDeviceEui()).thenReturn("DeviceEui");
+        repository.save(mockData);
+
+        // when
+        boolean actual = repository.remove(mockData);
+
+        // then
+        assertTrue(actual);
+    }
+
+    @DisplayName("null을 삭제하려고하면 예외 발생")
+    @Test
+    void throwExceptionWhenTryToRemoveNullData() {
+        // given
+        // when
+        Executable executable = () -> repository.remove((Data) null);
+
+        // then
+        assertThrows(IllegalArgumentException.class, executable);
+    }
 }

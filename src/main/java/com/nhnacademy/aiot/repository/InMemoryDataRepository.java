@@ -50,12 +50,22 @@ public class InMemoryDataRepository implements Repository<Data> {
     }
 
     @Override
-    public boolean remove(Data object) {
-        return false;
+    public boolean remove(Data data) {
+        if (data == null) {
+            log.error(NULL_CAN_NOT_BE_USED);
+            throw new IllegalArgumentException(NULL_CAN_NOT_BE_USED);
+        }
+
+        return remove(data.getDeviceEui());
     }
 
     @Override
     public boolean remove(String id) {
-        return false;
+        if (id == null) {
+            log.error(NULL_CAN_NOT_BE_USED);
+            throw new IllegalArgumentException(NULL_CAN_NOT_BE_USED);
+        }
+
+        return datas.remove(id) != null;
     }
 }
