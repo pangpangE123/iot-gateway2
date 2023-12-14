@@ -16,6 +16,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class InMemoryDataRepositoryTest {
+    private Repository<Data> repository;
 
     @BeforeEach
     void resetRepository() throws NoSuchFieldException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
@@ -26,58 +27,78 @@ class InMemoryDataRepositoryTest {
         Field field = InMemoryDataRepository.class.getDeclaredField("instance");
         field.setAccessible(true);
         field.set(null, constructor.newInstance());
+
+        repository = InMemoryDataRepository.getInstance();
     }
 
+    @DisplayName("레포지토리는 싱글톤")
     @Test
-    @DisplayName("레포지토리는 싱글톤으로 관리된다")
-    void getInstanceTest() {
+    void repositoryIsSingleton() {
         // given
         // when
-        InMemoryDataRepository instance = InMemoryDataRepository.getInstance();
-        InMemoryDataRepository instance2 = InMemoryDataRepository.getInstance();
+        Repository<Data> instance = InMemoryDataRepository.getInstance();
 
         // then
         Assertions.assertAll(
-                () -> assertNotNull(instance),
-                () -> assertEquals(instance, instance2)
+                () -> assertNotNull(repository),
+                () -> assertEquals(repository, instance)
         );
     }
 
+    @DisplayName("정상적인 객체라면 저장")
     @Test
-    @DisplayName("save를 하면 객체를 저장한다")
     @SuppressWarnings("unchecked")
-    void saveTest() throws NoSuchFieldException, IllegalAccessException {
+    void successToSaveIfObjectIsNormal() throws NoSuchFieldException, IllegalAccessException {
         // given
-        InMemoryDataRepository repository = InMemoryDataRepository.getInstance();
         Field field = InMemoryDataRepository.class.getDeclaredField("datas");
         field.setAccessible(true);
         ConcurrentHashMap<String, Data> datas = (ConcurrentHashMap<String, Data>) field.get(repository);
 
         String deviceEui = "DeviceEui";
         Data mockData = mock(Data.class);
-        Data mockData2 = mock(Data.class);
         when(mockData.getDeviceEui()).thenReturn(deviceEui);
-        when(mockData2.getDeviceEui()).thenReturn(deviceEui);
 
         // when
         boolean expected = repository.save(mockData);
-        boolean expected2 = repository.save(mockData);
 
         // then
         Assertions.assertAll(
                 () -> assertEquals(1, datas.size()),
                 () -> assertEquals(mockData, datas.get(deviceEui)),
-                () -> assertThrows(IllegalArgumentException.class, () -> repository.save(null)),
-                () -> assertTrue(expected),
-                () -> assertFalse(expected2)
+                () -> assertTrue(expected)
         );
     }
 
+    @DisplayName("null을 저장하면 예외 발생")
     @Test
-    @DisplayName("findById를 하면 해당하는 객체를 반환한다")
-    void findByIdTest() {
+    void throwExceptionWhenTryToSaveNull() {
         // given
-        InMemoryDataRepository repository = InMemoryDataRepository.getInstance();
+        // when
+        Executable executable = () -> repository.save(null);
+
+        // then
+        assertThrows(IllegalArgumentException.class, executable);
+    }
+
+    @DisplayName("동등한 객체를 저장하면 실패")
+    @Test
+    void failToSaveIfObjectIsNotChanged() {
+        // given
+        Data mockData = mock(Data.class);
+        when(mockData.getDeviceEui()).thenReturn("DeviceEui");
+        repository.save(mockData);
+
+        // when
+        boolean expected = repository.save(mockData);
+
+        // then
+        assertFalse(expected);
+    }
+
+    @DisplayName("객체를 찾으면 반환")
+    @Test
+    void returnObjectIfObjectIsFound() {
+        // given
         Data expected = mock(Data.class);
         String deviceEui = "DeviceEui";
         when(expected.getDeviceEui()).thenReturn(deviceEui);
@@ -85,10 +106,19 @@ class InMemoryDataRepositoryTest {
 
         // when
         Data actual = repository.findById(deviceEui);
+
+        // then
+        assertEquals(expected, actual);
+    }
+
+    @DisplayName("null을 찾으려고하면 예외 발생")
+    @Test
+    void throwExceptionWhenTryToFindNull() {
+        // given
+        // when
         Executable executable = () -> repository.findById(null);
 
         // then
         assertThrows(IllegalArgumentException.class, executable);
-        assertEquals(expected, actual);
     }
 }
