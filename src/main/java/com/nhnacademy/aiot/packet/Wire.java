@@ -10,6 +10,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class Wire {
+
+    private static final String NULL_PACKET_MESSAGE = "Wire: 패킷이 null이므로 Wire에 추가되지 않았습니다.";
+    private static final String INTERRUPTED_EXCEPTION_MESSAGE = "Wire: InterruptedException 발생";
+
     private final BlockingQueue<Packet> queue = new LinkedBlockingQueue<>();
 
     /**
@@ -21,7 +25,7 @@ public class Wire {
     public boolean put(Packet packet) {
         boolean isPacketSent = false;
         if (packet == null) {
-            log.debug("Wire: 패킷이 null이므로 Wire에 추가되지 않았습니다.");
+            log.debug(NULL_PACKET_MESSAGE);
             return true;
         }
         try {
@@ -29,7 +33,7 @@ public class Wire {
             isPacketSent = true;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            log.error("Wire: InterruptedException 발생", e);
+            log.error(INTERRUPTED_EXCEPTION_MESSAGE, e);
         }
         return isPacketSent;
     }
@@ -45,7 +49,7 @@ public class Wire {
             return queue.take();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            log.error("Wire: InterruptedException 발생", e);
+            log.error(INTERRUPTED_EXCEPTION_MESSAGE, e);
             return null;
         }
     }

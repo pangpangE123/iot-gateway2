@@ -11,16 +11,18 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class Packet extends JSONObject {
+    private static final String PACKET_CREATED_MESSAGE = "Packet: 패킷이 생성되었습니다. -생성시간: ";
+
     private Date creationDate;
 
     public Packet() {
         super();
         creationDate = new Date();
-        log.debug("Packet: 패킷이 생성되었습니다. (생성시간: " + getCreationDate() + ")");
+        log.debug(PACKET_CREATED_MESSAGE + getCreationDate());
     }
 
     /**
-     * 인스턴스가 생성된 시간을 반환합니다.
+     * 인스턴스가 생성된 시간을 반환합니다.s
      * 
      * @return 인스턴스가 생성된 시간
      */

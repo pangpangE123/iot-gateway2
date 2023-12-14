@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
- 
+
     <groupId>com.nhnacademy.aiot</groupId>
     <artifactId>packetprocessingengine</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
- 
+
     <name>packetprocessingengine</name>
     <url>http://www.example.com</url>
- 
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>11</java.version>
@@ -19,7 +20,7 @@
         <maven.compiler.release>${java.version}</maven.compiler.release>
 
         <junit>5.6.2</junit>
-        
+
         <!-- Plugin versions -->
         <maven.shade>3.2.2</maven.shade>
         <maven.clean>3.1.0</maven.clean>
@@ -86,8 +87,14 @@
             <artifactId>groovy-console</artifactId>
             <version>3.0.19</version>
         </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>4.2.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
             <plugin>
@@ -119,19 +126,20 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>${maven.shade}</version>
                 <executions>
-                <execution>
-                    <phase>package</phase>
-                    <goals>
-                    <goal>shade</goal>
-                    </goals>
-                    <configuration>
-                    <transformers>
-                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                        <mainClass>com.nhnacademy.aiot.Main</mainClass>
-                        </transformer>
-                    </transformers>
-                    </configuration>
-                </execution>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.nhnacademy.aiot.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
