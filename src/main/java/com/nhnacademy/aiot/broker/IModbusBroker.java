@@ -7,16 +7,22 @@ public interface IModbusBroker {
 
     /**
      * input stream에서 읽어온 byte 배열을 반환합니다.
-     * 
+     *
      * @return 읽어온 데이터
      */
     public byte[] read();
 
     /**
      * output stream에 byte 배열의 length만큼 byte를 쓰도록 합니다.
-     * 
+     *
      * @param b write할 데이터
      */
     public void write(byte[] b);
 
+    /**
+     * 브로커의 아이디를 가져옵니다.
+     *
+     * @return 브로커의 아이디를 반환합니다.
+     */
+    public String getId();
 }
