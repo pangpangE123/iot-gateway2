@@ -36,7 +36,7 @@ public class Info {
      * @param key 증가할 정보의 키 입니다.
      */
     public void increase(PacketType key) {
-        infos.computeIfAbsent(key, e -> 1L);
         infos.computeIfPresent(key, (k, value) -> value + 1);
+        infos.computeIfAbsent(key, e -> 1L);
     }
 }
