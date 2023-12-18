@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 시스템 메모리에 <code>Modbus Broker</code> 객체를 저장하는 레포지토리 클래스입니다.
+ * 시스템 메모리에 <code>MQTT Broker</code> 객체를 저장하는 레포지토리 클래스입니다.
  * <p>
  * 인메모리 데이터 레포지토리는 싱글톤 패턴으로 구현되어 있습니다.
  * <p>
